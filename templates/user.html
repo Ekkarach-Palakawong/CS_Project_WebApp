@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+  {% block content %}
+    <h1>ยินดีต้อนรับเข้าสู่หน้าโปรไฟล์ของตัวเอง</h1>
+    {% for item in myuser %}
+        <li>{{item}}</li>
+    {% endfor %}
+  {% endblock%}

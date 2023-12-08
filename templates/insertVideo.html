@@ -1,0 +1,21 @@
+<!-- index.html -->
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>ตรวจสอบอาการบ้านหมุน</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="video">Select a video:</label>
+        <input type="file" name="video" id="video" accept="video/*" onchange="handleFileSelect(event)">
+        <video id="videoElement" width="400" height="300" controls></video>
+        <button type="submit">Upload Video</button>
+    </form>
+    <script>
+        function handleFileSelect(event) {
+            var videoElement = document.getElementById('videoElement');
+            var file = event.target.files[0];
+            videoElement.src = URL.createObjectURL(file);
+            videoElement.controls = true;
+            localStorage.setItem('uploadedVideo', URL.createObjectURL(file));
+        }
+    </script>
+{% endblock%}
