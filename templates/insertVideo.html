@@ -2,20 +2,44 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>ตรวจสอบอาการบ้านหมุน</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="video">Select a video:</label>
-        <input type="file" name="video" id="video" accept="video/*" onchange="handleFileSelect(event)">
-        <video id="videoElement" width="400" height="300" controls></video>
-        <button type="submit">Upload Video</button>
-    </form>
-    <script>
-        function handleFileSelect(event) {
-            var videoElement = document.getElementById('videoElement');
-            var file = event.target.files[0];
-            videoElement.src = URL.createObjectURL(file);
-            videoElement.controls = true;
-            localStorage.setItem('uploadedVideo', URL.createObjectURL(file));
-        }
-    </script>
+<style>
+    form {
+        text-align: center;
+    }
+
+    #videoElement {
+        display: block;
+        margin: 0 auto;
+    }
+    input,button {
+            margin: 25px auto; /* Adjust the margin as needed */
+    }
+
+    /* Add other specific styles as needed */
+</style>
+<link rel="stylesheet" href="../static/style/Page-1.css" media="screen">
+    <section class="u-align-center u-clearfix u-image u-shading u-section-1" src="" data-image-width="256" data-image-height="256" id="sec-f2b1">
+        <div class="u-clearfix u-sheet u-sheet-1">
+            <div class="u-container-style u-expanded-width-sm u-expanded-width-xs u-group u-white u-group-1">
+            <div class="u-container-layout u-container-layout-1">
+                <h1 style="text-align: center;">ตรวจสอบอาการ</h1>
+                <video id="videoElement" width="400" height="300" controls ></video>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <label for="video">Select a video:</label>
+                    <input type="file" name="video" id="video" accept="video/*" onchange="handleFileSelect(event)" >
+                    <button type="submit" >Upload Video</button>
+                </form>
+                <script>
+                    function handleFileSelect(event) {
+                        var videoElement = document.getElementById('videoElement');
+                        var file = event.target.files[0];
+                        videoElement.src = URL.createObjectURL(file);
+                        videoElement.controls = true;
+                        localStorage.setItem('uploadedVideo', URL.createObjectURL(file));
+                    }
+                </script>
+            </div>
+            </div>
+        </div>
+    </section>
 {% endblock%}

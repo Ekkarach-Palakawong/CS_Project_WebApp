@@ -49,7 +49,7 @@ def upload():
         return 'No selected video file'
 
     # Save the video to the 'static' folder
-    video_path ='static/' + video.filename
+    video_path ='static/video/' + video.filename
     video.save(video_path)
     iris_position = detect_iris(video_path) #item=f'Iris Position: {iris_position}'
     return render_template('success.html',  item=iris_position)
@@ -151,41 +151,37 @@ def detect_iris(video_path):
     amprightx= amprightx[:len(FF_freq)]
     amprighty= amprighty[:len(FF_freq)]
 
-    mean_peakleftx = s.mean(ampleftx)
-    mean_peaklefty = s.mean(amplefty)
-    mean_peakrightx = s.mean(amprightx)
-    mean_peakrighty = s.mean(amprighty)
+    mean_leftx = s.mean(ampleftx)
+    mean_lefty = s.mean(amplefty)
+    mean_rightx = s.mean(amprightx)
+    mean_righty = s.mean(amprighty)
 
-    std_peakleftx = s.stdev(ampleftx)
-    std_peaklefty = s.stdev(amplefty)
-    std_peakrightx = s.stdev(amprightx)
-    std_peakrighty = s.stdev(amprighty)
+    std_leftx = s.stdev(ampleftx)
+    std_lefty = s.stdev(amplefty)
+    std_rightx = s.stdev(amprightx)
+    std_righty = s.stdev(amprighty)
 
     sqrtSampleSize = (m.sqrt(delta_tXn))
-    temp1x = std_peakleftx/sqrtSampleSize
-    temp1y = std_peaklefty/sqrtSampleSize
-    temp2x = std_peakrightx/sqrtSampleSize
-    temp2y = std_peakrighty/sqrtSampleSize
+    temp1x = std_leftx/sqrtSampleSize
+    temp1y = std_lefty/sqrtSampleSize
+    temp2x = std_rightx/sqrtSampleSize
+    temp2y = std_righty/sqrtSampleSize
 
-    CI_lx = stats.norm.interval(0.975, loc = mean_peakleftx, scale = temp1x)
+    CI_lx = stats.norm.interval(0.975, loc = mean_leftx, scale = temp1x)
     lwb_lx ,upb_lx = CI_lx
-    CI_ly = stats.norm.interval(0.975, loc = mean_peaklefty, scale = temp1y)
+    CI_ly = stats.norm.interval(0.975, loc = mean_lefty, scale = temp1y)
     lwb_ly ,upb_ly = CI_ly
 
-    CI_rx = stats.norm.interval(0.975, loc = mean_peakrightx, scale = temp2x)
+    CI_rx = stats.norm.interval(0.975, loc = mean_rightx, scale = temp2x)
     lwb_rx ,upb_rx = CI_rx
-    CI_ry = stats.norm.interval(0.975, loc = mean_peakrighty, scale = temp2y)
+    CI_ry = stats.norm.interval(0.975, loc = mean_righty, scale = temp2y)
     lwb_ry ,upb_ry = CI_ry
 
-    return upb_lx,upb_ly,upb_rx,upb_ry,lwb_lx,lwb_ly,lwb_rx,lwb_ry
+    return mean_leftx,mean_lefty,mean_rightx,mean_righty
 
-@app.route('/video/<filename>')
-def display_video(filename):
-    return render_template('display_video.html', filename=filename)
-
-@app.route('/static/<filename>')
+@app.route('/static/video/<filename>')
 def uploaded_file(filename):
-    return send_from_directory('static', filename)
+    return send_from_directory('static/video/', filename)
 #"yooo uer: {}, age : {}" .format(name,age)
 if __name__ == "__main__":
     app.run(debug=True)
