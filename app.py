@@ -54,6 +54,10 @@ def upload():
     iris_position = detect_iris(video_path) #item=f'Iris Position: {iris_position}'
     return render_template('success.html',  item=iris_position)
 
+@app.errorhandler(500)
+def internal_error(error):
+    return "500 error"
+
 def detect_iris(video_path):
 
     RIGHT_IRIS=[474,475,476,477]
@@ -184,4 +188,4 @@ def uploaded_file(filename):
     return send_from_directory('static/video/', filename)
 #"yooo uer: {}, age : {}" .format(name,age)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
