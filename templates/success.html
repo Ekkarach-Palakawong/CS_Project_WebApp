@@ -3,7 +3,7 @@
 {% block content %}
     <!--<p>Your video '{{ item }}' has been uploaded.</p>-->
     <!-- mean_lx,mean_ly,mean_rx,mean_ry -->
-    {% if ( (item[0] > 100 and item[1] > 100) or (item[2] > 100 and item[3] > 100) ) %}
+    {% if ( item == "nervous") %}
     <link rel="stylesheet" href="../static/style/Page-1.css" media="screen">
     <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
     <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="en">
@@ -23,8 +23,7 @@
         </section>
     </body>
 
-    {% elif ( ((item[0] > 50 and item[0] < 101) and (item[1] > 50 and item[1] < 101)) or 
-        ((item[2] > 50 and item[2] < 101) and (item[3] > 50 and item[3] < 101)) ) %}
+    {% elif ( item == "BPPV" ) %}
         <link rel="stylesheet" href="../static/style/Page-1.css" media="screen">
         <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
         <body data-path-to-root="./" data-include-products="false" class="u-body u-xl-mode" data-lang="en">

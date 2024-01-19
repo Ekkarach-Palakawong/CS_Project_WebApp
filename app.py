@@ -4,9 +4,13 @@ import cv2 as cv
 import numpy as np 
 import mediapipe as mp
 import statistics as s
-import scipy.stats as stats
+#import scipy.stats as stats
 from scipy.fft import fft
-from scipy.signal import find_peaks
+#from scipy.signal import find_peaks
+from datetime import datetime
+import csv
+import os  
+import shutil  
 
 app = Flask(__name__)
 
@@ -16,18 +20,6 @@ def index():
             "age": 30,
             "alary": 50000}
     return render_template('index.html',mydata = data)
-
-@app.route('/admin')
-def profile():
-    username = "P_each"
-    name = "Ekkarach"
-    age = "22"
-    return render_template('admin.html',username = username,myname = name, myage = age)
-
-@app.route('/user')#/user/<name>
-def member():
-    user = {"name","ID","PhoneNum"}
-    return render_template('user.html',myuser = user)
 
 @app.route('/insertVideo')
 def insertV():
@@ -51,14 +43,6 @@ def upload():
     # Save the video to the 'static' folder
     video_path ='static/video/' + video.filename
     video.save(video_path)
-    iris_position = detect_iris(video_path) #item=f'Iris Position: {iris_position}'
-    return render_template('success.html',  item=iris_position)
-
-@app.errorhandler(500)
-def internal_error(error):
-    return "500 error"
-
-def detect_iris(video_path):
 
     RIGHT_IRIS=[474,475,476,477]
     LEFT_IRIS=[469,470,471,472]
@@ -160,7 +144,7 @@ def detect_iris(video_path):
     mean_rightx = s.mean(amprightx)
     mean_righty = s.mean(amprighty)
 
-    std_leftx = s.stdev(ampleftx)
+    '''std_leftx = s.stdev(ampleftx)
     std_lefty = s.stdev(amplefty)
     std_rightx = s.stdev(amprightx)
     std_righty = s.stdev(amprighty)
@@ -179,9 +163,34 @@ def detect_iris(video_path):
     CI_rx = stats.norm.interval(0.975, loc = mean_rightx, scale = temp2x)
     lwb_rx ,upb_rx = CI_rx
     CI_ry = stats.norm.interval(0.975, loc = mean_righty, scale = temp2y)
-    lwb_ry ,upb_ry = CI_ry
+    lwb_ry ,upb_ry = CI_ry'''
+    
+    if (mean_leftx > 100 and mean_lefty > 100) or (mean_rightx > 100 and mean_righty > 100):
+        P_results = "nervous"
+        destination = 'static/video/Nervous/'+video.filename
+    elif ( ((mean_leftx > 50 and mean_leftx < 101) and (mean_lefty > 50 and mean_lefty < 101)) or 
+        ((mean_rightx > 50 and mean_rightx < 101) and (mean_righty > 50 and mean_righty < 101)) ):
+        P_results = "BPPV"
+        destination = 'static/video/BPPV/'+video.filename
+    else:
+        P_results = "Negative"
+        destination = 'static/video/Negative/'+video.filename
+    
+    HNno = request.form['HNno']
+    selected_date = request.form['datepicker']
+    Patient_age = request.form['P_age']
+    Patient_name = request.form['P_name']
+    shutil.move(video_path, destination)  
 
-    return mean_leftx,mean_lefty,mean_rightx,mean_righty
+    with open('data.csv', 'a', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        csv_writer.writerow([HNno, Patient_name, Patient_age, selected_date,destination])
+            
+    return render_template('success.html',  item=P_results)
+
+@app.errorhandler(500)
+def internal_error(error):
+    return "500 error"
 
 @app.route('/static/video/<filename>')
 def uploaded_file(filename):

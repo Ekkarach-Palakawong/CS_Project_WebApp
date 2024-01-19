@@ -3,19 +3,47 @@
 
 {% block content %}
 <style>
-    form {
-        text-align: center;
-    }
+    body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
 
-    #videoElement {
-        display: block;
-        margin: 0 auto;
-    }
-    input,button {
-            margin: 25px auto; /* Adjust the margin as needed */
-    }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
 
-    /* Add other specific styles as needed */
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            grid-column: span 2; /* Span the full width of the form */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        #videoElement {
+          display: block;
+          margin: 0 auto;
+    }
 </style>
 <link rel="stylesheet" href="../static/style/Page-1.css" media="screen">
     <section class="u-align-center u-clearfix u-image u-shading u-section-1" src="" data-image-width="256" data-image-height="256" id="sec-f2b1">
@@ -24,12 +52,28 @@
             <div class="u-container-layout u-container-layout-1">
                 <h1 style="text-align: center;">ตรวจสอบอาการ</h1>
                 <video id="videoElement" width="400" height="300" controls ></video>
+                <label >  </label>
                 <form action="/upload" method="post" enctype="multipart/form-data">
-                    <label for="video">Select a video:</label>
-                    <input type="file" name="video" id="video" accept="video/*" onchange="handleFileSelect(event)" >
-                    <button type="submit" >Upload Video</button>
+
+                    <label for="video">Please Select a video:</label>
+                    <input type="file" name="video" id="video" accept="video/*" onchange="handleFileSelect(event)">
+
+                    <label for="HNno">HN:</label>
+                    <input type="text" name="HNno" required placeholder="Enter HN">
+
+                    <label for="P_age">Patient Age:</label>
+                    <input type="number" name="P_age" required min="1" placeholder="Enter Patient Age">
+
+                    <label for="P_name">Patient Name:</label>
+                    <input type="text" name="P_name" required placeholder="Enter Patient Name">
+
+                    <label for="datepicker">Select a date:</label>
+                    <input type="date" name="datepicker" id="datepicker" required>
+
+                    <button type="submit">Submit</button>
                 </form>
                 <script>
+                    document.getElementById('datepicker').valueAsDate = new Date();
                     function handleFileSelect(event) {
                         var videoElement = document.getElementById('videoElement');
                         var file = event.target.files[0];
